@@ -4,8 +4,12 @@ import SemanticSearchEngineFactory as factory
 # ==== Config ====
 thread_name = "Internet"
 queries = [
-    "best communicators",
-    "toxic person",
+    "Animals",
+    "troll",
+    "Telecommunications in African countries",
+    "Telecommunications Monaco",
+    "History of internet",
+    # "Displaying HTML element in website"
     "internet protocols",
     "music in india",
     "video streaming",
@@ -17,11 +21,11 @@ queries = [
 ]
 
 # ==== Fetch from WIKIPEDIA_API ====
-# body, pages_content = fetch_wikipedia_articles(thread_name, 300, summary_only=True, debug_logs=True)
+# body, pages_content = utils.fetch_wikipedia_articles(thread_name, 100000, summary_only=True, debug_logs=True)
 # titles = list(pages_content.keys())
 
 # ==== Save to file fetched data ====
-# save_to_file(body, titles, thread_name)
+# utils.save_to_file(body, titles, thread_name)
 
 # ==== Read from file if exists ====
 body, pages_content = utils.read_from_file(thread_name)
@@ -43,6 +47,4 @@ for type, se in search_engines.items():
     print("Using search engine with words vector type: ", type)
     se.learn()
     for q in queries:
-        print("===== SEARCHING FOR =====", q)
         se.query(q)
-

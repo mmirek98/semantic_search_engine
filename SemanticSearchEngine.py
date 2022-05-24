@@ -1,4 +1,6 @@
 from sklearn.decomposition import TruncatedSVD
+from sklearn.metrics.pairwise import cosine_similarity
+
 import pandas as pd
 import numpy as np
 
@@ -7,25 +9,46 @@ class SemanticSearchEngine:
     def __init__(self, corpus, vectorizer, n_components, articles_label):
         self._corpus = corpus
         self._vectorizer = vectorizer
-        self._lsa = TruncatedSVD(n_components=n_components)
+        self._lsa = TruncatedSVD(n_components=n_components, n_iter=10)
         self._articles_label = articles_label
 
     def learn(self):
-        vec = self._prepare_words_vector()
-        self._fit_lsa_model(vec)
-        self._topic_vectors = self._calculate_topic_vectors(vec)
+        # self.vec = self._prepare_words_vector()
+        # self._fit_lsa_model(vec)
+        # self._topic_vectors = self._calculate_topic_vectors(vec)
+        pass
 
     def query(self, expression, n_results=10):
-        question = [expression]
-        question_df = pd.DataFrame(self._vectorizer.transform(raw_documents=question).toarray())
-        lsa_q = self._lsa.transform(question_df)
+        # self._corpus.insert(0, expression)
+        # self.vec = self._prepare_words_vector()
+        fitted = self._vectorizer.fit_transform(np.concatenate(([expression], self._corpus)))
+        cosine_similarities = cosine_similarity(fitted[0:1], fitted[1:]).flatten()
+
+        highest_score = 0
+        highest_score_index = 0
+        for i, score in enumerate(cosine_similarities):
+            if highest_score < score:
+                highest_score = score
+                highest_score_index = i
 
 
-        if lsa_q[0].all() == 0:
-            print("No results for ", expression, "! Please enter another query...")
-            return
-        results = self._calculate_best_results(lsa_q, n_results)
-        self._print_results(results, expression)
+        print("=== Q: ", expression)
+
+        most_similar_document = self._articles_label[highest_score_index]
+
+
+        print("Most similar document by TF-IDF with the score:", most_similar_document, highest_score)
+        # question = [expression]
+        # question_df = pd.DataFrame(self._vectorizer.transform(raw_documents=question).toarray())
+        # lsa_q = self._lsa.transform(question_df)
+        # print("== Question Vector: ", lsa_q)
+        #
+        #
+        # if lsa_q[0].all() == 0:
+        #     print("No results for ", expression, "! Please enter another query...")
+        #     return
+        # results = self._calculate_best_results(lsa_q, n_results)
+        # self._print_results(results, expression)
 
     def _prepare_words_vector(self):
         vec = pd.DataFrame(self._vectorizer.fit_transform(raw_documents=self._corpus).toarray())

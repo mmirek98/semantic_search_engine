@@ -9,6 +9,7 @@ f1 = open("YorkAustralia.txt", "r")
 corpus= f1.readlines()
 f2 = open("NewYork.txt", "r")
 corpus.append(f2.readlines()[0])
+corpus.append("")
 print("step 1 = ", corpus)
 # corpus.append("York is a cathedral city with Roman origins at the confluence of the rivers Ouse and Foss in North Yorkshire, England. It is the historic county town of Yorkshire. The city has long-standing buildings and structures, such as a minster, castle and city walls. The city was founded as Eboracum in 71 AD. It became the capital of the Roman province of Britannia Inferior, and later of the kingdoms of Deira, Northumbria and Jórvík. In the Middle Ages, the northern England ecclesiastical province's centre and grew as a wool-trading centre. In the 19th century, it became a major railway network hub and confectionery manufacturing centre. During the Second World War, part of the Baedeker Blitz bombed the city; it was less affected by the war than other northern cities, with several historic buildings being gutted and restored upto the 1960s.")
 
@@ -31,7 +32,7 @@ print("step 3 = \n ",pca_topic_vectors.round(3).head(6))
 
 # now do the querry:
 print("step 4 = ")
-Q = ["biggest city in america"]
+Q = ["What is biggest city?"]
 tfidf_Q = pd.DataFrame(tfidf.transform(raw_documents=Q).toarray())
 #print("tfidf_Q = ", tfidf_Q)
 pca_Q = pca.transform(tfidf_Q)
