@@ -64,8 +64,5 @@ def read_from_file(filename):
 
     return body, pages_content
 
-def prepare_stop_words(thread_name):
-    sw = stopwords.words('english')
-    # TODO: change to thread name
-    sw.append(thread_name)
-    return sw
+def get_stopwords():
+    return list(stopwords.words('english'))

@@ -1,33 +1,33 @@
-from nltk import casual_tokenize
-from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
-from DataUtils import prepare_stop_words
 from SemanticSearchEngine import SemanticSearchEngine
+from algorithms.BagOfWords import BagOfWords
+from algorithms.Jaccard import Jaccard
+from algorithms.NGram import NGram
+from algorithms.Tfidf import TfidfAlgorithm
 
 
-def create_tfidf_search(thread_name, corpus, titles, n_components):
-    stop_words = list(prepare_stop_words(thread_name))
+def create_tfidf_search(corpus, titles):
     return SemanticSearchEngine(
         corpus,
-        TfidfVectorizer(stop_words=stop_words, tokenizer=casual_tokenize),
-        n_components,
-        # 100,
+        TfidfAlgorithm(corpus),
+        titles,
+    )
+def create_bag_of_words_search(corpus, titles):
+    return SemanticSearchEngine(
+        corpus,
+        BagOfWords(corpus),
         titles
     )
 
-def create_bag_of_words_search(thread_name, corpus, titles, n_components):
-    stop_words = list(prepare_stop_words(thread_name))
+def create_ngrams_search(corpus, titles):
     return SemanticSearchEngine(
         corpus,
-        CountVectorizer(stop_words=stop_words, tokenizer=casual_tokenize),
-        n_components,
+        NGram(corpus),
         titles
     )
 
-def create_ngrams_search(thread_name, corpus, titles, n_components, ngram_range):
-    stop_words = list(prepare_stop_words(thread_name))
+def create_jaccard_search(corpus, titles):
     return SemanticSearchEngine(
         corpus,
-        CountVectorizer(stop_words=stop_words, tokenizer=casual_tokenize, ngram_range=ngram_range),
-        n_components,
+        Jaccard(corpus),
         titles
     )

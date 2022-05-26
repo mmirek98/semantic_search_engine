@@ -1,5 +1,10 @@
+import nltk
+
 import DataUtils as utils
 import SemanticSearchEngineFactory as factory
+
+nltk.download("punkt")
+nltk.download('stopwords')
 
 # ==== Config ====
 thread_name = "Internet"
@@ -33,18 +38,27 @@ titles = list(pages_content.keys())
 
 
 # ==== Create search engines ====
-tfidf_search = factory.create_tfidf_search(thread_name, body, titles, len(titles))
-ngram_search = factory.create_ngrams_search(thread_name, body, titles, len(titles), (2, 3))
-bag_of_words_search = factory.create_bag_of_words_search(thread_name, body, titles, len(titles))
+tfidf_search = factory.create_tfidf_search(body, titles)
+ngram_search = factory.create_ngrams_search(body, titles)
+bag_of_words_search = factory.create_bag_of_words_search(body, titles)
+jaccard_search = factory.create_jaccard_search(body, titles)
+
 search_engines = {
-    "BAG_OF_WORDS": bag_of_words_search,
-    "NGRAM": ngram_search,
-    "TFIDF": tfidf_search,
+    # "BAG_OF_WORDS": bag_of_words_search,
+    # "NGRAM": ngram_search,
+    # "TFIDF": tfidf_search,
+    "JACCARD": jaccard_search
 }
+
+# print("type anython")
+# var = input()
+# print("you typed: ", var)
+#
+# print("next ...")
+
+
 
 # ==== Main loop ====
 for type, se in search_engines.items():
-    print("Using search engine with words vector type: ", type)
-    se.learn()
     for q in queries:
-        se.query(q)
+        se.query(q, 3)
