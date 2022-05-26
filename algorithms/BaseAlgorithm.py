@@ -9,11 +9,11 @@ class BaseAlgorithm(ABC):
 
     def get_best_results(self, n_results=1):
         results = sorted(self._results, reverse=True)[:n_results]
-        # keys = np.argsort(-self._results)[:n_results]
+        keys = np.argsort(-self._results)[:n_results]
 
         summary = {}
-        # for r, k in zip(results, keys):
-        #     summary[k] = r
+        for r, k in zip(results, keys):
+            summary[k] = r
 
         return summary
 
@@ -30,11 +30,6 @@ class BaseVectorizer(BaseAlgorithm):
         vectorizer = self._get_vectorizer()
         fitted = self._fit_vectorizer(vectorizer, querry)
         self._results = self._calculate_cosine_similarities(fitted[0:1], fitted[1:])
-        # print("BaseVectorizer res: ", self._results)
-
-        # highest_score, highest_score_index = self._calculate_highest_score(cosine_similarities)
-        # return highest_score, highest_score_index
-        # print("Most similar document by TF-IDF with the score:", most_similar_document, highest_score)
 
     @abstractmethod
     def _get_vectorizer(self):
